@@ -1,0 +1,143 @@
+{
+  "name": "progres 3",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.question ?? '' }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -368,
+        -16
+      ],
+      "id": "0cbcbc86-09f9-4e04-b4c3-af8b26c1a48d",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "abd86c09-e55a-431b-9af5-2c69942def6f",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -768,
+        -80
+      ],
+      "id": "00a7af35-0869-4a93-98a8-a7f00ea05da7",
+      "name": "Webhook",
+      "webhookId": "abd86c09-e55a-431b-9af5-2c69942def6f"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        176
+      ],
+      "id": "92293367-5142-4106-a2c9-c4fca409ed87",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "qjDphL0xGFm0Mc9k",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ {\n  \"answer\": $json.output || $json.result || $json.response || $json.text || $json,\n  \"raw\": $json\n} }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -48,
+        -112
+      ],
+      "id": "5dc4a80c-5cc5-4e6b-ba47-0253ac5a10bf",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "nonbeneficently-advisory-genevive.ngrok-free.dev",
+            "user-agent": "node-fetch/1.0 (+https://github.com/bitinn/node-fetch)",
+            "content-length": "18",
+            "accept": "*/*",
+            "accept-encoding": "gzip,deflate",
+            "content-type": "application/json",
+            "x-forwarded-for": "118.99.73.142",
+            "x-forwarded-host": "nonbeneficently-advisory-genevive.ngrok-free.dev",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "question": "hay"
+          },
+          "webhookUrl": "https://nonbeneficently-advisory-genevive.ngrok-free.dev/webhook/abd86c09-e55a-431b-9af5-2c69942def6f",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "33731c6e-2d08-456e-8080-2facc956e690",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "0c1e5aaca0c64925fcc253e688b3175e1fc60017f07e2c39c4a20910a1335b0f"
+  },
+  "id": "IoYve5mIyhGf5XuO",
+  "tags": []
+}
